@@ -10,6 +10,9 @@ const geistSans = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXTAUTH_URL || "https://hum-client-book.thelinkfor.me"
+  ),
   title: "HUM Client Book",
   description:
     "Your polished command center for loyal riders, repeat routes, and better fares.",
