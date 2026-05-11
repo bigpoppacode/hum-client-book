@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent artifacts
+FIX_SPEC_P2.md
+P2_FIXES_COMPLETE.md
+QA_REPORT.md
+QA_SPEC.md
+agent-qa.log
+claude-fix-p2.log
