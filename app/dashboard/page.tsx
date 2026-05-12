@@ -106,6 +106,7 @@ export default function DashboardPage() {
           aria-label="Sort clients"
         >
           <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
           <option value="rides">Most Rides</option>
           <option value="alphabetical">A–Z</option>
           <option value="revenue">Highest Revenue</option>

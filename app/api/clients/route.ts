@@ -132,6 +132,9 @@ export async function GET(request: NextRequest) {
       case "revenue":
         pipeline.push({ $sort: { totalRevenue: -1, name: 1 } });
         break;
+      case "oldest":
+        pipeline.push({ $sort: { createdAt: 1 } });
+        break;
       case "newest":
       default:
         pipeline.push({ $sort: { createdAt: -1 } });
