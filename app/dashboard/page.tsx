@@ -5,6 +5,7 @@ import Link from "next/link";
 import SearchBar from "@/components/SearchBar";
 import FilterChips from "@/components/FilterChips";
 import ClientCard from "@/components/ClientCard";
+import HelpModal from "@/components/HelpModal";
 
 interface ClientData {
   _id: string;
@@ -23,6 +24,7 @@ export default function DashboardPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sort, setSort] = useState("newest");
   const [loading, setLoading] = useState(true);
+  const [showHelp, setShowHelp] = useState(false);
 
   const fetchClients = useCallback(async () => {
     const params = new URLSearchParams();
@@ -70,9 +72,20 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="px-4 pb-4 pt-6">
         <div className="mb-4 rounded-[2rem] bg-gradient-to-br from-slate-950 via-primary-900 to-teal-700 p-5 text-white shadow-glow">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-100/80">
-            Client command center
-          </p>
+          <div className="flex items-start justify-between">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-100/80">
+              Client command center
+            </p>
+            <button
+              onClick={() => setShowHelp(true)}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/25"
+              aria-label="Help"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+              </svg>
+            </button>
+          </div>
           <div className="mt-4 flex items-end justify-between gap-4">
             <div>
               <h1 className="text-4xl font-black tracking-tight">Clients</h1>
@@ -162,11 +175,10 @@ export default function DashboardPage() {
       {/* FAB */}
       <Link
         href="/dashboard/clients/new"
-        className="fixed bottom-24 right-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-primary-600 to-teal-500 text-white shadow-glow transition-transform hover:-translate-y-0.5 active:translate-y-0"
-        aria-label="Add new client"
+        className="fixed bottom-24 right-4 flex min-h-[52px] items-center gap-2 rounded-full bg-gradient-to-br from-primary-600 to-teal-500 px-5 py-3 text-white shadow-glow transition-transform hover:-translate-y-0.5 active:translate-y-0"
       >
         <svg
-          className="h-7 w-7"
+          className="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={2.5}
@@ -178,7 +190,14 @@ export default function DashboardPage() {
             d="M12 4.5v15m7.5-7.5h-15"
           />
         </svg>
+        <span className="text-sm font-bold">Add Client</span>
       </Link>
+
+      <HelpModal
+        isOpen={showHelp}
+        onClose={() => setShowHelp(false)}
+        text="Your Client Command Center. Add clients you drive for, tag them by type, and track their ride history. Use search and filters to find regulars fast. Tap a client to see their full profile and insights."
+      />
     </div>
   );
 }

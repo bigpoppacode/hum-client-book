@@ -74,6 +74,7 @@ export default function NewRidePage() {
       </div>
       <RideLogForm
         clientId={clientId}
+        clientName={clientName}
         defaultRate={defaultRate}
         prefillPickup={prefillPickup}
         prefillDropoff={prefillDropoff}

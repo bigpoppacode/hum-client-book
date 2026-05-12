@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { computeInsights } from "@/lib/insights";
+import HelpModal from "@/components/HelpModal";
 
 interface ClientData {
   _id: string;
@@ -34,6 +35,7 @@ const groupColors = {
 export default function ClientDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const dangerZoneRef = useRef<HTMLDivElement>(null);
   const [client, setClient] = useState<ClientData | null>(null);
   const [rides, setRides] = useState<RideData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,8 @@ export default function ClientDetailPage() {
   const [notes, setNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
   const [notesSaved, setNotesSaved] = useState(false);
+  const [showDangerZone, setShowDangerZone] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [editingTags, setEditingTags] = useState(false);
   const [editTags, setEditTags] = useState<string[]>([]);
@@ -51,6 +55,7 @@ export default function ClientDetailPage() {
   const [editRate, setEditRate] = useState("");
   const [savingPrefs, setSavingPrefs] = useState(false);
   const [toast, setToast] = useState("");
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -103,8 +108,14 @@ export default function ClientDetailPage() {
     }
   }
 
+  function revealDangerZone() {
+    setShowDangerZone(true);
+    setTimeout(() => {
+      dangerZoneRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }
+
   async function handleDelete() {
-    if (!confirm("Delete this client and all their rides? This cannot be undone.")) return;
     setDeleting(true);
     try {
       const res = await fetch(`/api/clients/${params.id}`, {
@@ -112,10 +123,20 @@ export default function ClientDetailPage() {
         credentials: "include",
       });
       if (res.ok) {
+        sessionStorage.setItem(
+          "toast",
+          `${client?.name || "Client"} has been deleted`
+        );
         router.push("/dashboard");
+      } else {
+        setDeleting(false);
+        setShowDeleteModal(false);
+        showToast("Failed to delete client");
       }
     } catch {
       setDeleting(false);
+      setShowDeleteModal(false);
+      showToast("Failed to delete client");
     }
   }
 
@@ -256,25 +277,60 @@ export default function ClientDetailPage() {
             </div>
           </div>
         </div>
-        <Link
-          href={`/dashboard/clients/${client._id}/edit`}
-          className="flex min-h-tap min-w-tap items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur hover:bg-white/25"
-          aria-label="Edit client"
-        >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setShowHelp(true)}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/25"
+            aria-label="Help"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-            />
-          </svg>
-        </Link>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+            </svg>
+          </button>
+          <Link
+            href={`/dashboard/clients/${client._id}/edit`}
+            className="flex min-h-tap min-w-tap items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur hover:bg-white/25"
+            aria-label="Edit client"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+              />
+            </svg>
+          </Link>
+          <button
+            onClick={revealDangerZone}
+            className="flex min-h-tap min-w-tap items-center justify-center rounded-2xl bg-white/15 text-white backdrop-blur hover:bg-white/25"
+            aria-label="Manage client"
+          >
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
       </div>
 
@@ -608,16 +664,55 @@ export default function ClientDetailPage() {
         )}
       </div>
 
-      {/* Delete Client */}
-      <div className="px-4 pb-4">
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className="btn-danger"
-        >
-          {deleting ? "Deleting..." : "Delete Client"}
-        </button>
-      </div>
+      {/* Danger Zone */}
+      {showDangerZone && (
+        <div ref={dangerZoneRef} className="mx-4 mb-4 rounded-2xl border border-red-200 bg-red-50/80 p-4">
+          <p className="mb-1 text-xs font-bold uppercase tracking-widest text-red-400">
+            Danger Zone
+          </p>
+          <p className="mb-3 text-sm text-red-600">
+            Deleting a client is permanent and cannot be undone.
+          </p>
+          <button
+            onClick={() => setShowDeleteModal(true)}
+            className="min-h-tap w-full rounded-2xl border-2 border-red-300 bg-transparent px-4 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
+          >
+            Delete Client and All Rides
+          </button>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-2 text-lg font-black text-slate-900">
+              Delete {client.name}?
+            </h3>
+            <p className="mb-6 text-sm text-slate-600">
+              This will permanently remove this client and all{" "}
+              {rides.length} {rides.length === 1 ? "ride" : "rides"} associated
+              with them. This cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="btn-primary min-h-tap flex-1"
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="min-h-tap flex-1 rounded-2xl border-2 border-red-400 bg-transparent px-4 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-50"
+              >
+                {deleting ? "Deleting..." : "Delete Permanently"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Log Ride CTA */}
       <div className="px-4 pb-28 pt-2">
@@ -625,7 +720,7 @@ export default function ClientDetailPage() {
           href={`/dashboard/clients/${client._id}/rides/new`}
           className="btn-primary block text-center"
         >
-          Log Ride
+          {rides.length > 0 ? "Log Another Ride" : "Log Ride"}
         </Link>
       </div>
 
@@ -635,6 +730,12 @@ export default function ClientDetailPage() {
           {toast}
         </div>
       )}
+
+      <HelpModal
+        isOpen={showHelp}
+        onClose={() => setShowHelp(false)}
+        text="Everything about this client in one place. See their ride history, how often they ride, and what they've spent. Tap their phone number to call them directly. Use 'Book Again' to quickly log a repeat ride."
+      />
     </div>
   );
 }

@@ -88,6 +88,18 @@ export default function ClientForm({ initialData, mode }: ClientFormProps) {
       }
 
       const clientId = mode === "edit" ? initialData?._id : data._id;
+
+      if (mode === "create") {
+        sessionStorage.setItem("toast", "Client added successfully");
+        sessionStorage.setItem(
+          "toast-info",
+          JSON.stringify({
+            message: `Demo Mode: In production, ${name} would receive an onboarding email with their booking link and your contact info.`,
+            type: "info",
+          })
+        );
+      }
+
       router.push(`/dashboard/clients/${clientId}`);
       router.refresh();
     } catch {
