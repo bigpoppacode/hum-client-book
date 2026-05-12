@@ -8,6 +8,13 @@
 
 # testing
 /coverage
+/qa/coverage
+/qa/test-results
+/qa/unit-results.json
+/qa/e2e-results.json
+/qa/results.json
+/qa/report/
+/qa/.auth
 
 # next.js
 /.next/
@@ -40,5 +47,19 @@ FIX_SPEC_P2.md
 P2_FIXES_COMPLETE.md
 QA_REPORT.md
 QA_SPEC.md
+QA_PLAN.md
+QA_BUILD_SUMMARY.md
+AGENT_QA_TASK.md
+CLAUDE_ROADMAP_TASK.md
+CLAUDE_ROADMAP_TASK_V2.md
+SURGE_DEPLOY_FIX.md
+PRD0NOTES.md
+PRDNOTES.md
 agent-qa.log
+agent-qa-build.log
 claude-fix-p2.log
+claude-roadmap.log
+claude-roadmap-v2.log
+claude-roadmap-12days.log
+qa-execution.log
+qa-execution-v2.log
