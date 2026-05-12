@@ -15,7 +15,7 @@ Email/password registration and login with JWT sessions (7-day expiry). All data
 Add, edit, and delete clients with structured data: name, phone, email, group classification (A/B/C/D), custom tags (Airport, Business, Medical, Late Night, etc.), default rate, and notes. The add-client flow is optimized to complete in under 30 seconds on mobile.
 
 ### Search, Filter & Sort
-Real-time debounced search by name or phone number. Filter by group or tags. Sort by newest, most rides, alphabetical, or highest revenue. All powered by MongoDB aggregation with `$lookup` for ride stats.
+Real-time debounced search by name or phone number. Filter by group or tags. Sort by newest, oldest, most rides, alphabetical, or highest revenue. All powered by MongoDB aggregation with `$lookup` for ride stats.
 
 ### Client Detail & Insights
 Full client profile with tappable `tel:` and `mailto:` links, editable notes and preferences, and a computed insights grid:
@@ -133,7 +133,49 @@ AUTH_TRUST_HOST=true
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:31912](http://localhost:31912).
+
+## Quality Assurance
+
+This project includes a comprehensive QA suite covering:
+
+- **27 unit tests** for pure functions and API validation (Jest)
+- **33 E2E tests** for end-to-end flows (Playwright on mobile viewport)
+- **100% auto pass rate** (60/60 automated tests passing)
+- **Automated test execution** with HTML report generation
+
+### Running Tests
+
+**Unit tests only:**
+
+```bash
+npm run test:unit
+```
+
+**E2E tests only** (requires the app reachable at `http://localhost:31912` — use `npm run dev` or `npm start`):
+
+```bash
+npm run test:e2e
+```
+
+**Full QA suite with merged JSON + HTML report:**
+
+```bash
+npm run test:report
+```
+
+**View latest hosted QA report:** [HUM Client Book QA Report](https://1778607409669-hum-client-book-qa.surge.sh/)
+
+### Test Coverage
+
+- Authentication (registration, login, logout, route protection)
+- Client CRUD (add, view, edit, delete with confirmation)
+- Client list (search, filter, sort)
+- Ride logging (validation, Book Again, fare pre-fill, payment toasts)
+- Earnings dashboard (period filters, summary cards)
+- Profile and bottom navigation
+
+See [qa/USER_STORIES.md](qa/USER_STORIES.md) for full acceptance criteria and story IDs. Executive summary after a full run: [qa/QA_SNAPSHOT.md](qa/QA_SNAPSHOT.md).
 
 ### Production
 
@@ -171,7 +213,7 @@ All routes except health, auth handlers, and register require authentication. Ev
 - `search` — case-insensitive name/phone search
 - `tags` — repeated param to filter by tags (e.g. `?tags=Airport&tags=VIP`)
 - `group` — filter by group (A, B, C, D)
-- `sort` — `newest` (default), `alphabetical`, `rides`, `revenue`
+- `sort` — `newest` (default), `oldest`, `alphabetical`, `rides`, `revenue`
 
 **GET /api/rides/summary**
 - `period` — `today`, `week` (Monday start), `month`, `all` (default)

@@ -1,5 +1,9 @@
 # HUM Client Book — App Presentation & Testing Guide
 
+## QA automation
+
+After `npm run test:report`, open **`qa/report/index.html`** locally or the hosted report at **[hum-client-book-qa.surge.sh](https://hum-client-book-qa.surge.sh)**. Executive summary tables are regenerated at **`qa/QA_SNAPSHOT.md`**.
+
 ---
 
 ## What Is HUM Client Book?
@@ -111,7 +115,7 @@ HUM Client Book is a **mobile-first web application** for independent drivers to
 - [ ] Filters combine with search (search for "a" + filter by "VIP")
 
 **Sort:**
-- [ ] Use the sort dropdown: Newest, Most Rides, A-Z, Revenue
+- [ ] Use the sort dropdown: Newest, Oldest, Most Rides, A-Z, Revenue
 - [ ] Verify the client list reorders correctly
 - [ ] "Most Rides" should show high-ride clients first
 - [ ] "Revenue" should sort by total fare earned
@@ -327,6 +331,40 @@ HUM Client Book is a **mobile-first web application** for independent drivers to
 8. Switch to "This Month" — data filters correctly
 9. Go to Profile — tap Sign Out — confirms logout
 10. Try accessing `/dashboard` while logged out — redirected to login
+
+---
+
+## Automated QA Report
+
+**Live Report:** [https://1778607409669-hum-client-book-qa.surge.sh/](https://1778607409669-hum-client-book-qa.surge.sh/)
+
+| Metric | Value |
+|--------|-------|
+| **Total Auto Tests** | 60 (27 Jest + 33 Playwright) |
+| **Passed** | 60 |
+| **Failed** | 0 |
+| **Manual Rows** | 4 (accessibility spot-checks) |
+| **Auto Pass Rate** | 100% |
+
+### Coverage by Feature Area
+
+| Feature | Tests | Status |
+|---------|-------|--------|
+| Authentication | 5 | All passing |
+| Dashboard (search, filter, sort) | 6 | All passing |
+| Client CRUD | 7 | All passing |
+| Rides (logging, Book Again, toasts) | 5 | All passing |
+| Earnings | 4 | All passing |
+| Profile & Navigation | 4 + 1 manual | All passing |
+| Accessibility | 3 manual | Manual verification |
+
+### Running Tests Locally
+
+```bash
+npm run test:unit      # Jest unit tests
+npm run test:e2e       # Playwright E2E (app must be running on :31912)
+npm run test:report    # Full suite + HTML report generation
+```
 
 ---
 

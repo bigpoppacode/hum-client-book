@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HUM Client Book - QA Report</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --muted: #94a3b8;
+      --text: #e5e7eb;
+      --pass: #22c55e;
+      --fail: #ef4444;
+      --manual: #f59e0b;
+      --border: #1f2937;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 10% -10%, #0b2a3a 0%, var(--bg) 55%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      padding: 2.5rem 1.5rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 { margin: 0 0 0.5rem; font-size: 2rem; letter-spacing: -0.02em; }
+    header p { margin: 0.25rem 0; color: var(--muted); }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+    .stat {
+      background: linear-gradient(180deg, rgba(56,189,248,.08), rgba(17,24,39,.75));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .stat .label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .stat .value { display: block; margin-top: .4rem; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
+    .stat .value.pass { color: var(--pass); }
+    .stat .value.fail { color: var(--fail); }
+    .stat .value.manual { color: var(--manual); }
+    .feature-group { max-width: 1100px; margin: 0 auto 2.5rem; padding: 0 1.5rem; }
+    .feature-group h2 { margin: 0 0 1rem; font-size: 1.25rem; letter-spacing: -0.01em; }
+    .feature-group .stats { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-left: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; background: rgba(17,24,39,.65); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    thead th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0.75rem 0.85rem; background: rgba(15,23,42,.75); border-bottom: 1px solid var(--border); }
+    tbody td { padding: 0.7rem 0.85rem; border-top: 1px solid rgba(255,255,255,.04); vertical-align: top; }
+    tbody tr:hover td { background: rgba(56,189,248,.04); }
+    code { background: rgba(255,255,255,.06); padding: 2px 6px; border-radius: 6px; }
+    .badge { display: inline-block; font-weight: 800; font-size: 0.72rem; letter-spacing: 0.06em; padding: 0.25rem 0.55rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.08); }
+    .badge.pass { color: #052e16; background: #bbf7d0; border-color: #86efac; }
+    .badge.fail { color: #450a0a; background: #fecaca; border-color: #fca5a5; }
+    .badge.manual { color: #451a03; background: #fde68a; border-color: #fcd34d; }
+    td.detail { color: #cbd5e1; font-size: 0.9rem; word-break: break-word; }
+    footer { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem 3rem; color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>HUM Client Book - QA Report</h1>
+    <p>Driver-facing CRM for professional rideshare drivers</p>
+    <p>Stack: Next.js 14, MongoDB, NextAuth.js</p>
+    <p>Generated: 2026-05-12T16:43:54.180Z</p>
+  </header>
+
+  <section class="summary">
+    <div class="stat"><span class="label">Total Auto Tests (Jest + Playwright)</span><span class="value">60</span></div>
+    <div class="stat"><span class="label">Passed</span><span class="value pass">54</span></div>
+    <div class="stat"><span class="label">Failed</span><span class="value fail">6</span></div>
+    <div class="stat"><span class="label">Manual Rows</span><span class="value manual">4</span></div>
+    <div class="stat"><span class="label">Auto Pass Rate</span><span class="value">90%</span></div>
+  </section>
+
+  <section class="feature-group">
+  <h2>Authentication <span class="stats">4 pass / 1 fail / 0 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-AUTH-001</code></td>
+        <td>Register with valid email/password</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Jest passed; Playwright passed</td>
+      </tr><tr>
+        <td><code>US-AUTH-002</code></td>
+        <td>Login with valid credentials; protected routes</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-AUTH-003</code></td>
+        <td>Invalid login shows error</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td class="detail">test-results/auth--Auth-US-AUTH-003-invalid-login-shows-error-e2e-auth/test-failed-1.png</td>
+      </tr><tr>
+        <td><code>US-AUTH-004</code></td>
+        <td>Session persists after reload</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-AUTH-005</code></td>
+        <td>Logout redirects to /login</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Dashboard <span class="stats">5 pass / 1 fail / 0 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-DASH-001</code></td>
+        <td>Client list loads; count matches list</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-DASH-002</code></td>
+        <td>Search by name filters clients</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-DASH-003</code></td>
+        <td>Search by phone filters clients</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-DASH-004</code></td>
+        <td>VIP/Regular/New chips filter</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-DASH-005</code></td>
+        <td>Sort options change ordering</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td class="detail">test-results/dashboard--Dashboard-US-DASH-005-sort-select-changes-value-e2e-app/test-failed-1.png</td>
+      </tr><tr>
+        <td><code>US-DASH-006</code></td>
+        <td>FAB opens add client form</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Client CRUD <span class="stats">5 pass / 2 fail / 0 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-CLIENT-001</code></td>
+        <td>Add client with all fields succeeds</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td class="detail">test-results/client-crud--Client-CRUD-U-c8a08--add-client-with-all-fields-e2e-app/test-failed-1.png</td>
+      </tr><tr>
+        <td><code>US-CLIENT-002</code></td>
+        <td>Add client validates required fields</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td class="detail">Jest passed</td>
+      </tr><tr>
+        <td><code>US-CLIENT-003</code></td>
+        <td>Detail shows insights, notes, history</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-CLIENT-004</code></td>
+        <td>tel: and mailto: links present</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-CLIENT-005</code></td>
+        <td>Edit updates information</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-CLIENT-006</code></td>
+        <td>Delete via gear → danger zone → modal</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-CLIENT-007</code></td>
+        <td>Notes save</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Rides <span class="stats">5 pass / 0 fail / 0 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-RIDE-001</code></td>
+        <td>Log ride validates required fields</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Jest passed; Playwright passed</td>
+      </tr><tr>
+        <td><code>US-RIDE-002</code></td>
+        <td>Log ride saves; appears in history</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Jest passed; Playwright passed</td>
+      </tr><tr>
+        <td><code>US-RIDE-003</code></td>
+        <td>Book Again prefills pickup/dropoff</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-RIDE-004</code></td>
+        <td>Fare prefilled from default rate</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-RIDE-005</code></td>
+        <td>Payment toast sequence</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Earnings <span class="stats">4 pass / 0 fail / 0 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-EARN-001</code></td>
+        <td>Period tabs switch summary</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-EARN-002</code></td>
+        <td>Summary cards show totals</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-EARN-003</code></td>
+        <td>Top client displays</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-EARN-004</code></td>
+        <td>Recent rides list</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Profile &amp; Navigation <span class="stats">3 pass / 1 fail / 1 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-PROF-001</code></td>
+        <td>User info displays</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-PROF-002</code></td>
+        <td>Sign out redirects to login</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-NAV-001</code></td>
+        <td>Bottom nav reaches Clients/Earnings/Profile</td>
+        <td><span class="badge pass">PASS</span></td>
+        <td class="detail">Playwright passed</td>
+      </tr><tr>
+        <td><code>US-NAV-002</code></td>
+        <td>Active tab visually highlighted / aria-current</td>
+        <td><span class="badge manual">MANUAL</span></td>
+        <td class="detail">Manual check (see USER_STORIES.md)</td>
+      </tr><tr>
+        <td><code>US-NAV-003</code></td>
+        <td>Help modal can be opened and dismissed</td>
+        <td><span class="badge fail">FAIL</span></td>
+        <td class="detail">test-results/profile--Profile-Nav-US-NA-5a7f7-lp-modal-opens-on-dashboard-e2e-app/test-failed-1.png</td>
+      </tr></tbody></table></section><section class="feature-group">
+  <h2>Accessibility <span class="stats">0 pass / 0 fail / 3 manual</span></h2>
+  <table>
+    <thead>
+      <tr><th>Story ID</th><th>Acceptance Criterion</th><th>Status</th><th>Detail</th></tr>
+    </thead>
+    <tbody><tr>
+        <td><code>US-A11Y-001</code></td>
+        <td>Touch targets ≥ 44px (spot-check)</td>
+        <td><span class="badge manual">MANUAL</span></td>
+        <td class="detail">Manual check (see USER_STORIES.md)</td>
+      </tr><tr>
+        <td><code>US-A11Y-002</code></td>
+        <td>Visible focus rings (keyboard)</td>
+        <td><span class="badge manual">MANUAL</span></td>
+        <td class="detail">Manual check (see USER_STORIES.md)</td>
+      </tr><tr>
+        <td><code>US-A11Y-003</code></td>
+        <td>Responsive layout from 320px width</td>
+        <td><span class="badge manual">MANUAL</span></td>
+        <td class="detail">Manual check (see USER_STORIES.md)</td>
+      </tr></tbody></table></section>
+
+  <footer>
+    Artifacts: Jest JSON (qa/unit-results.json), Playwright JSON (qa/e2e-results.json), screenshots/videos under qa/test-results on failures.
+  </footer>
+</body>
+</html>

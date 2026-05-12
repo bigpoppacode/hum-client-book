@@ -11,7 +11,7 @@ export default function HelpModal({ text, isOpen, onClose }: HelpModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-6 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-4 pb-28 backdrop-blur-sm sm:items-center sm:pb-6"
       onClick={onClose}
     >
       <div
